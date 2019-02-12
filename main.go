@@ -62,11 +62,11 @@ func Reply(username, password, msg string) bool {
 }
 
 func main() {
-    fmt.Print(Add(1, 2))
+    fmt.Println(Add(1, 2))
 
     d := MongoDao{}
     srv := NewService(d)
-    fmt.Print(srv.Login("abc"))
+    fmt.Println(srv.Login("abc"))
 
     Reply("a", "a", "aa")
     Reply("a", "b", "ab")

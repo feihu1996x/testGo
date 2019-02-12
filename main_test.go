@@ -1,6 +1,7 @@
 package main
 
 import (
+    "github.com/golang/mock/gomock"
     "testing"
 )
 
@@ -72,7 +73,7 @@ func TestFailService_login(t *testing.T) {
     srv := NewService(d)
     rst := srv.Login("abc")
     if rst {
-        t.Error("Login Success")
+        t.Error("Login Error")
     }
 }
 
@@ -95,5 +96,29 @@ func TestFailReply(t *testing.T) {
     }
     if Reply("a", "a", "aa") {
         t.Errorf("Reply true for login fail")
+    }
+}
+
+func TestMockSuccessService_Login(t *testing.T) {
+    mockCtrl := gomock.NewController(t)
+    defer mockCtrl.Finish()
+    d := NewMockDAO(mockCtrl)
+    d.EXPECT().ReadAll().Return([]Data{{"abc"}})
+    srv := NewService(d)
+    rst := srv.Login("abc")
+    if !rst {
+        t.Errorf("Login Error")
+    }
+}
+
+func TestMockFailService_Login(t *testing.T) {
+    mockCtrl := gomock.NewController(t)
+    defer mockCtrl.Finish()
+    d := NewMockDAO(mockCtrl)
+    d.EXPECT().ReadAll().Return([]Data{})
+    srv := NewService(d)
+    rst := srv.Login("abc")
+    if rst {
+        t.Errorf("Login Error")
     }
 }
